@@ -1,13 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:provider/provider.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'core/theme/app_theme.dart';
-import 'core/router/app_router.dart';
-import 'providers/user_provider.dart';
-import 'providers/quest_provider.dart';
-import 'providers/feed_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -15,14 +8,14 @@ void main() async {
   try {
     // Load environment variables
     await dotenv.load(fileName: '.env');
-    print(' Environment variables loaded');
+    print('✅ Environment variables loaded');
     
-    // Get Supabase credentials
+    // Initialize Supabase
     final supabaseUrl = dotenv.env['SUPABASE_URL'] ?? '';
     final supabaseAnonKey = dotenv.env['SUPABASE_ANON_KEY'] ?? '';
     
-    print('Supabase URL: ${supabaseUrl.isNotEmpty ? ' Set' : ' Missing'}');
-    print('Anon Key: ${supabaseAnonKey.isNotEmpty ? ' Set' : ' Missing'}');
+    print('Supabase URL: $supabaseUrl');
+    print('Anon Key: ${supabaseAnonKey.isNotEmpty ? '✅ Set' : '❌ Missing'}');
     
     if (supabaseUrl.isNotEmpty && supabaseAnonKey.isNotEmpty) {
       await Supabase.initialize(
@@ -30,45 +23,69 @@ void main() async {
         anonKey: supabaseAnonKey,
         debug: true,
       );
-      print(' Supabase initialized successfully');
+      print('✅ Supabase initialized successfully');
     } else {
-      print(' Supabase credentials missing');
+      print('❌ Supabase credentials missing');
     }
     
-    // Set system UI overlay style for transparent status bar
-    SystemChrome.setSystemUIOverlayStyle(
-      const SystemUiOverlayStyle(
-        statusBarColor: Colors.transparent,
-        statusBarIconBrightness: Brightness.light,
-        systemNavigationBarColor: Color(0xFF0A0E1A),
-        systemNavigationBarIconBrightness: Brightness.light,
-      ),
-    );
-    
-    runApp(const LvlUpApp());
+    runApp(const MyApp());
   } catch (e, stackTrace) {
-    print(' Initialization failed: $e');
+    print('❌ Initialization failed: $e');
     print('Stack trace: $stackTrace');
     runApp(ErrorApp(error: e.toString()));
   }
 }
 
-class LvlUpApp extends StatelessWidget {
-  const LvlUpApp({super.key});
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (_) => UserProvider()),
-        ChangeNotifierProvider(create: (_) => QuestProvider()),
-        ChangeNotifierProvider(create: (_) => FeedProvider()),
-      ],
-      child: MaterialApp.router(
-        title: 'LvlUp - Habit Tracker RPG',
-        debugShowCheckedModeBanner: false,
-        theme: AppTheme.darkTheme,
-        routerConfig: AppRouter.router(),
+    return MaterialApp(
+      title: 'LvlUp - Habit Tracker',
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        useMaterial3: true,
+      ),
+      home: const TestScreen(),
+    );
+  }
+}
+
+class TestScreen extends StatelessWidget {
+  const TestScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('LvlUp - Habit Tracker'),
+        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+      ),
+      body: const Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.check_circle,
+              size: 80,
+              color: Colors.green,
+            ),
+            SizedBox(height: 20),
+            Text(
+              'App is Working!',
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            SizedBox(height: 10),
+            Text(
+              'Supabase connection successful',
+              style: TextStyle(fontSize: 16),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -83,7 +100,6 @@ class ErrorApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        backgroundColor: const Color(0xFF0A0E1A),
         appBar: AppBar(
           title: const Text('Error'),
           backgroundColor: Colors.red,
@@ -111,10 +127,7 @@ class ErrorApp extends StatelessWidget {
                 const SizedBox(height: 10),
                 Text(
                   error,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    color: Color(0xFF94A3B8),
-                  ),
+                  style: const TextStyle(fontSize: 16),
                   textAlign: TextAlign.center,
                 ),
               ],

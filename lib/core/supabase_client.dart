@@ -2,18 +2,18 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 /// Supabase client initialization and configuration
-class SupabaseClient {
-  static SupabaseClient? _instance;
+class SupabaseService {
+  static SupabaseService? _instance;
   late final SupabaseClient _client;
 
   // Private constructor for singleton pattern
-  SupabaseClient._internal() {
+  SupabaseService._internal() {
     _client = Supabase.instance.client;
   }
 
   /// Get the singleton instance
-  factory SupabaseClient() {
-    _instance ??= SupabaseClient._internal();
+  factory SupabaseService() {
+    _instance ??= SupabaseService._internal();
     return _instance!;
   }
 
@@ -42,17 +42,17 @@ class SupabaseClient {
   SupabaseClient get client => _client;
 
   /// Get the auth service
-  SupabaseAuth get auth => _client.auth;
+  GoTrueClient get auth => _client.auth;
 
-  /// Get the database service
-  SupabaseQueryBuilder get from => _client.from;
+  /// Get database service
+  SupabaseQueryBuilder Function(String table) get from => _client.from;
 
   /// Get the storage service
   SupabaseStorageClient get storage => _client.storage;
 
   /// Get the realtime service
-  SupabaseRealtimeClient get realtime => _client.realtime;
+  RealtimeClient get realtime => _client.realtime;
 
   /// Get the functions service
-  SupabaseFunctions get functions => _client.functions;
+  FunctionsClient get functions => _client.functions;
 }

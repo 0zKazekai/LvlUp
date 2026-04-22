@@ -14,12 +14,18 @@ migrate_working_dir/
 
 # Environment variables
 .env
+*.env
 .env.local
 .env.production
+.env.development
+.env.staging
 
 # Build folders
 /build/
 /build/
+
+# Supabase generated files
+supabase/.temp/
 
 # IntelliJ related
 *.iml
