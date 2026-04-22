@@ -1,5 +1,4 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import '../security/app_security.dart';
 import '../../models/user.dart' as user_model;
 import '../../models/habit.dart';
@@ -14,13 +13,6 @@ class DatabaseService {
 
   Future<void> initialize() async {
     try {
-      final supabaseUrl = dotenv.env['SUPABASE_URL'] ?? '';
-      final supabaseAnonKey = dotenv.env['SUPABASE_ANON_KEY'] ?? '';
-      
-      if (supabaseUrl.isEmpty || supabaseAnonKey.isEmpty) {
-        throw Exception('Supabase credentials not found in environment variables');
-      }
-
       _client = Supabase.instance.client;
       
       // Test connection
@@ -36,7 +28,7 @@ class DatabaseService {
   SupabaseClient get client => _client;
 
   // User operations with type safety
-  Future<User?> getCurrentUser() async {
+  Future<user_model.User?> getCurrentUser() async {
     try {
       final userId = _client.auth.currentUser?.id;
       if (userId == null) {

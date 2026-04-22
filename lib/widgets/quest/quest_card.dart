@@ -6,6 +6,42 @@ import '../common/rank_badge.dart';
 import 'proof_upload_modal.dart';
 import '../../providers/quest_provider.dart';
 
+class ProofButton extends StatelessWidget {
+  final bool isCompleted;
+  final VoidCallback? onPressed;
+
+  const ProofButton({
+    Key? key,
+    required this.isCompleted,
+    this.onPressed,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+      onPressed: onPressed,
+      style: ElevatedButton.styleFrom(
+        backgroundColor: isCompleted
+            ? AppColors.textSecondary.withOpacity(0.2)
+            : AppColors.cyan,
+        foregroundColor: isCompleted ? AppColors.textSecondary : AppColors.bg,
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 9),
+        minimumSize: Size.zero,
+        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+        elevation: isCompleted ? 0 : 2,
+      ),
+      child: Text(
+        isCompleted ? 'DONE' : 'SUBMIT PROOF',
+        style: AppTextStyles.label.copyWith(
+          fontWeight: FontWeight.w700,
+          letterSpacing: 0.5,
+        ),
+      ),
+    );
+  }
+}
+
 class QuestCard extends StatelessWidget {
   final Quest quest;
   final Function(String)? onProofSubmitted;

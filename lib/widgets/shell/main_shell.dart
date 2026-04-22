@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
 import '../../pages/dashboard_page.dart';
-import '../../pages/proof_feed_page.dart';
-import '../../pages/my_arc_page.dart';
-import '../../pages/guilds_page.dart';
+import '../../pages/feed/proof_feed_page.dart';
+import '../../pages/my_arc/my_arc_page.dart';
+import '../../pages/network/network_page.dart';
 import '../../pages/profile_page.dart';
 
 class MainShell extends StatefulWidget {
@@ -21,7 +21,7 @@ class _MainShellState extends State<MainShell> {
     const DashboardPage(),
     const ProofFeedPage(),
     const MyArcPage(),
-    const GuildsPage(),
+    const NetworkPage(),
     const ProfilePage(),
   ];
 

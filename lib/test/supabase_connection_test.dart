@@ -1,5 +1,4 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 void main() {
@@ -7,15 +6,11 @@ void main() {
     late SupabaseClient supabase;
 
     setUpAll(() async {
-      // Load environment variables for testing
-      await dotenv.load(fileName: '.env');
-      
-      // Initialize Supabase for testing
-      final supabaseUrl = dotenv.env['SUPABASE_URL'] ?? '';
-      final supabaseAnonKey = dotenv.env['SUPABASE_ANON_KEY'] ?? '';
-      
+      const supabaseUrl = String.fromEnvironment('SUPABASE_URL');
+      const supabaseAnonKey = String.fromEnvironment('SUPABASE_ANON_KEY');
+
       if (supabaseUrl.isEmpty || supabaseAnonKey.isEmpty) {
-        throw Exception('SUPABASE_URL and SUPABASE_ANON_KEY must be set in .env file');
+        throw Exception('Pass credentials via --dart-define=SUPABASE_URL=... --dart-define=SUPABASE_ANON_KEY=...');
       }
       
       await Supabase.initialize(

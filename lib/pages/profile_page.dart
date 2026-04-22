@@ -6,6 +6,7 @@ import '../providers/user_provider.dart';
 import '../widgets/common/xp_bar.dart';
 import '../widgets/common/stat_bar.dart';
 import '../widgets/common/achievement_badge.dart';
+import '../widgets/proof/proof_timeline.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -46,6 +47,50 @@ class ProfilePage extends StatelessWidget {
       emoji: ' ',
       color: AppColors.rankD,
       unlocked: true,
+    ),
+  ];
+
+  // Sample proof data for demonstration
+  final List<ProofItem> _sampleProofs = [
+    ProofItem(
+      id: '1',
+      questName: 'Morning Meditation',
+      thumbnailUrl: 'https://picsum.photos/seed/meditation/400/300.jpg',
+      timestamp: DateTime.now().subtract(const Duration(hours: 2)),
+      isVideo: false,
+      xpEarned: 25,
+    ),
+    ProofItem(
+      id: '2',
+      questName: 'Exercise Session',
+      thumbnailUrl: 'https://picsum.photos/seed/workout/400/300.jpg',
+      timestamp: DateTime.now().subtract(const Duration(days: 1)),
+      isVideo: false,
+      xpEarned: 50,
+    ),
+    ProofItem(
+      id: '3',
+      questName: 'Read a Book',
+      thumbnailUrl: 'https://picsum.photos/seed/reading/400/300.jpg',
+      timestamp: DateTime.now().subtract(const Duration(days: 2)),
+      isVideo: true,
+      xpEarned: 30,
+    ),
+    ProofItem(
+      id: '4',
+      questName: 'Healthy Meal',
+      thumbnailUrl: 'https://picsum.photos/seed/meal/400/300.jpg',
+      timestamp: DateTime.now().subtract(const Duration(days: 3)),
+      isVideo: false,
+      xpEarned: 20,
+    ),
+    ProofItem(
+      id: '5',
+      questName: 'Social Connection',
+      thumbnailUrl: 'https://picsum.photos/seed/social/400/300.jpg',
+      timestamp: DateTime.now().subtract(const Duration(days: 4)),
+      isVideo: false,
+      xpEarned: 40,
     ),
   ];
 
@@ -298,6 +343,16 @@ class ProfilePage extends StatelessWidget {
                       );
                     },
                   ),
+                ),
+              ),
+
+              const SliverToBoxAdapter(child: SizedBox(height: 24)),
+
+              // Proof Timeline section
+              SliverToBoxAdapter(
+                child: Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 16),
+                  child: ProofTimeline(proofs: _sampleProofs),
                 ),
               ),
 

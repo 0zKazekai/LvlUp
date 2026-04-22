@@ -1,4 +1,3 @@
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 /// Supabase client initialization and configuration
@@ -17,24 +16,22 @@ class SupabaseService {
     return _instance!;
   }
 
-  /// Initialize Supabase with environment variables
+  /// Initialize Supabase with compile-time dart-define constants
   static Future<void> initialize() async {
-    final supabaseUrl = dotenv.env['SUPABASE_URL'] ?? '';
-    final supabaseAnonKey = dotenv.env['SUPABASE_ANON_KEY'] ?? '';
+    const supabaseUrl = String.fromEnvironment('SUPABASE_URL');
+    const supabaseAnonKey = String.fromEnvironment('SUPABASE_ANON_KEY');
 
     if (supabaseUrl.isEmpty || supabaseAnonKey.isEmpty) {
       throw Exception(
-        'Supabase URL and Anon Key must be set in .env file\n'
-        'Please add your Supabase credentials to the .env file:\n'
-        'SUPABASE_URL=your_supabase_url_here\n'
-        'SUPABASE_ANON_KEY=your_supabase_anon_key_here',
+        'Supabase credentials not provided.\n'
+        'Run with: flutter run --dart-define=SUPABASE_URL=... --dart-define=SUPABASE_ANON_KEY=...',
       );
     }
 
     await Supabase.initialize(
       url: supabaseUrl,
       anonKey: supabaseAnonKey,
-      debug: true, // Set to false in production
+      debug: true,
     );
   }
 

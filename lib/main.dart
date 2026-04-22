@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'core/theme/app_theme.dart';
 import 'core/router/app_router.dart';
@@ -14,14 +13,9 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   
   try {
-    // Load environment variables
-    await dotenv.load(fileName: '.env');
-    print(' Environment variables loaded');
-    
-    // Get Supabase credentials
-    final supabaseUrl = dotenv.env['SUPABASE_URL'] ?? '';
-    final supabaseAnonKey = dotenv.env['SUPABASE_ANON_KEY'] ?? '';
-    
+    const supabaseUrl = String.fromEnvironment('SUPABASE_URL');
+    const supabaseAnonKey = String.fromEnvironment('SUPABASE_ANON_KEY');
+
     print('Supabase URL: ${supabaseUrl.isNotEmpty ? ' Set' : ' Missing'}');
     print('Anon Key: ${supabaseAnonKey.isNotEmpty ? ' Set' : ' Missing'}');
     

@@ -73,6 +73,31 @@ class AppTextStyles {
     fontWeight: FontWeight.w600,
     height: 1.2,
   );
+
+  static const TextStyle buttonSecondary = TextStyle(
+    fontSize: 16,
+    fontWeight: FontWeight.w500,
+    height: 1.2,
+  );
+
+  static const TextStyle navLabel = TextStyle(
+    fontSize: 10,
+    fontWeight: FontWeight.w500,
+    height: 1.2,
+  );
+
+  static const TextStyle appName = TextStyle(
+    fontSize: 28,
+    fontWeight: FontWeight.w800,
+    height: 1.2,
+    letterSpacing: 1.0,
+  );
+
+  static const TextStyle levelBadge = TextStyle(
+    fontSize: 14,
+    fontWeight: FontWeight.w700,
+    height: 1.2,
+  );
   
   // Specialized styles
   static const TextStyle statValue = TextStyle(
@@ -89,6 +114,18 @@ class AppTextStyles {
   
   static const TextStyle rank = TextStyle(
     fontSize: 16,
+    fontWeight: FontWeight.bold,
+    height: 1.2,
+  );
+  
+  static const TextStyle xpNumber = TextStyle(
+    fontSize: 18,
+    fontWeight: FontWeight.bold,
+    height: 1.2,
+  );
+  
+  static const TextStyle statNumber = TextStyle(
+    fontSize: 20,
     fontWeight: FontWeight.bold,
     height: 1.2,
   );

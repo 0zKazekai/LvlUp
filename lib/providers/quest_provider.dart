@@ -28,6 +28,43 @@ class Quest {
     this.availableUntil,
   });
 
+  factory Quest.fromJson(Map<String, dynamic> json) {
+    return Quest(
+      id: json['id'] as String,
+      title: json['title'] as String,
+      description: json['description'] as String? ?? '',
+      arc: json['arc'] as String,
+      rank: json['rank'] as String? ?? 'C',
+      xpReward: json['xp_reward'] as int? ?? 10,
+      statRewards: (json['stat_rewards'] as Map<String, dynamic>?)
+              ?.map((k, v) => MapEntry(k, v as int)) ??
+          {},
+      isCompleted: json['is_completed'] as bool? ?? false,
+      completedAt: json['completed_at'] != null
+          ? DateTime.parse(json['completed_at'] as String)
+          : null,
+      isDaily: json['is_daily'] as bool? ?? false,
+      availableUntil: json['available_until'] != null
+          ? DateTime.parse(json['available_until'] as String)
+          : null,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'title': title,
+      'description': description,
+      'arc': arc,
+      'rank': rank,
+      'xp_reward': xpReward,
+      'stat_rewards': statRewards,
+      'is_completed': isCompleted,
+      'completed_at': completedAt?.toIso8601String(),
+      'is_daily': isDaily,
+      'available_until': availableUntil?.toIso8601String(),
+    };
+  }
+
   Quest copyWith({
     String? id,
     String? title,

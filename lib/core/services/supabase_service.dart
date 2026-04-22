@@ -1,5 +1,4 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import '../security/app_security.dart';
 
 class SupabaseService {
@@ -12,13 +11,6 @@ class SupabaseService {
 
   Future<void> initialize() async {
     try {
-      final supabaseUrl = dotenv.env['SUPABASE_URL'] ?? '';
-      final supabaseAnonKey = dotenv.env['SUPABASE_ANON_KEY'] ?? '';
-      
-      if (supabaseUrl.isEmpty || supabaseAnonKey.isEmpty) {
-        throw Exception('Supabase credentials not found in environment variables');
-      }
-
       _client = Supabase.instance.client;
       
       // Test connection

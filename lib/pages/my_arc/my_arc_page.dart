@@ -16,7 +16,6 @@ class MyArcPage extends StatefulWidget {
 
 class _MyArcPageState extends State<MyArcPage> {
   String _selectedArc = 'Fitness';
-  bool _isChatExpanded = false;
 
   final List<ArcInfo> _arcs = [
     ArcInfo(
@@ -252,8 +251,9 @@ class _MyArcPageState extends State<MyArcPage> {
             },
           ),
 
-          // Bottom section: SystemOSChat in expandable card
-          SliverToBoxAdapter(
+          // SystemOSChat - Full height AI Coach
+          SliverFillRemaining(
+            hasScrollBody: false,
             child: Container(
               margin: const EdgeInsets.all(16),
               decoration: BoxDecoration(
@@ -267,61 +267,57 @@ class _MyArcPageState extends State<MyArcPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Header with expand/collapse
-                  GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        _isChatExpanded = !_isChatExpanded;
-                      });
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.all(16),
-                      child: Row(
-                        children: [
-                          Text(
-                            'SYSTEM ADVISOR',
-                            style: AppTextStyles.terminal.copyWith(
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold,
-                              color: AppColors.cyan,
-                            ),
-                          ),
-                          const Spacer(),
-                          Icon(
-                            _isChatExpanded 
-                                ? Icons.expand_less 
-                                : Icons.expand_more,
-                            color: AppColors.cyan,
-                            size: 20,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  
-                  // Divider
+                  // Header
                   Container(
-                    height: 1,
-                    color: AppColors.textSecondary.withOpacity(0.1),
-                  ),
-                  
-                  // Chat widget (expandable)
-                  if (_isChatExpanded)
-                    Container(
-                      height: 300,
-                      margin: const EdgeInsets.all(16),
-                      child: const SystemOSChat(),
-                    )
-                  else
-                    Container(
-                      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                      child: Text(
-                        'Tap to ask about your $_selectedArc progress and available quests',
-                        style: AppTextStyles.bodySmall.copyWith(
-                          color: AppColors.textSecondary.withOpacity(0.7),
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      border: Border(
+                        bottom: BorderSide(
+                          color: AppColors.textSecondary.withOpacity(0.1),
+                          width: 1,
                         ),
                       ),
                     ),
+                    child: Row(
+                      children: [
+                        Text(
+                          'SYSTEM ADVISOR',
+                          style: AppTextStyles.terminal.copyWith(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.cyan,
+                          ),
+                        ),
+                        const Spacer(),
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                          decoration: BoxDecoration(
+                            color: AppColors.cyan.withOpacity(0.1),
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(
+                              color: AppColors.cyan.withOpacity(0.3),
+                              width: 1,
+                            ),
+                          ),
+                          child: Text(
+                            'AI COACH',
+                            style: AppTextStyles.bodySmall.copyWith(
+                              color: AppColors.cyan,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  
+                  // Chat widget - takes full remaining space
+                  Expanded(
+                    child: Container(
+                      margin: const EdgeInsets.all(16),
+                      child: const SystemOSChat(),
+                    ),
+                  ),
                 ],
               ),
             ),

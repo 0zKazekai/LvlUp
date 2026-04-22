@@ -20,6 +20,10 @@ class AppColors {
   
   // Rank colors
   static const Color rankD = Color(0xFF6B7280); // Gray
+  static const Color success = Color(0xFF10B981); // Green
+  static const Color warning = Color(0xFFF59E0B); // Orange
+  static const Color error = Color(0xFFEF4444); // Red
+  static const Color red = Color(0xFFEF4444); // Red
   static const Color rankC = Color(0xFF10B981); // Green
   static const Color rankB = Color(0xFF3B82F6); // Blue
   static const Color rankA = Color(0xFF8B5CF6); // Purple

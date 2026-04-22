@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../core/services/database_service.dart';
 import '../models/habit.dart';
-import '../models/user.dart';
+import '../models/user.dart' as user_model;
 
 class DataPlumbingTest extends StatefulWidget {
   const DataPlumbingTest({Key? key}) : super(key: key);
@@ -38,11 +38,11 @@ class _DataPlumbingTestState extends State<DataPlumbingTest> {
       final user = await _dbService.getCurrentUser();
       if (user != null) {
         _appendResult(' SUCCESS: User fetched');
-        _appendResult(' User: ${user.username} (Level ${user.level})');
-        _appendResult(' XP: ${user.currentXP}/${user.xpToNextLevel}');
-        _appendResult(' Stats: STR=${user.str}, VIT=${user.vit}, INT=${user.intel}, CHA=${user.cha}');
+        _appendResult(' User ID: ${user.id}');
+        _appendResult(' Email: ${user.email}');
+        _appendResult(' Created at: ${user.createdAt}');
       } else {
-        _appendResult(' INFO: No authenticated user found');
+        _appendResult(' FAILED: No user found');
       }
 
       // Test habit fetch

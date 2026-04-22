@@ -18,20 +18,14 @@ jobs:
     - name: Setup Flutter
       uses: subosito/flutter-action@v2
       with:
-        flutter-version: '3.11.5'
+        flutter-version: '3.41.7'
         channel: 'stable'
         
     - name: Install dependencies
       run: flutter pub get
       
-    - name: Create environment file
-      run: |
-        echo "SUPABASE_URL=${{ secrets.SUPABASE_URL }}" > .env
-        echo "SUPABASE_ANON_KEY=${{ secrets.SUPABASE_ANON_KEY }}" >> .env
-        echo "APP_ENV=production" >> .env
-        
     - name: Build web app
-      run: flutter build web --release --no-tree-shake-icons --base-href="/LvlUp/"
+      run: flutter build web --release --no-tree-shake-icons --base-href="/LvlUp/" --dart-define=SUPABASE_URL=${{ secrets.SUPABASE_URL }} --dart-define=SUPABASE_ANON_KEY=${{ secrets.SUPABASE_ANON_KEY }}
       
     - name: Deploy to GitHub Pages
       uses: peaceiris/actions-gh-pages@v3
