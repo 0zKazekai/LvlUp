@@ -1,4 +1,4 @@
-name: Build Web Demo (Simple)
+name: Build Web Demo (Fixed)
 
 on:
   push:
@@ -8,6 +8,10 @@ on:
 jobs:
   build-web:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
     
     steps:
     - name: Checkout code
@@ -30,7 +34,7 @@ jobs:
         echo "SUPABASE_ANON_KEY=${{ secrets.SUPABASE_ANON_KEY }}" >> lib/.env
         echo "APP_ENV=production" >> lib/.env
         
-        # Verify the file was created
+        # Verify is file was created
         echo "Environment file contents:"
         cat lib/.env
         
