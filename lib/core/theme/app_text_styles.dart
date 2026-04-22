@@ -98,6 +98,18 @@ class AppTextStyles {
     fontWeight: FontWeight.w700,
     height: 1.2,
   );
+
+  static const TextStyle questTitle = TextStyle(
+    fontSize: 15,
+    fontWeight: FontWeight.w600,
+    height: 1.3,
+  );
+
+  static const TextStyle questDesc = TextStyle(
+    fontSize: 13,
+    fontWeight: FontWeight.normal,
+    height: 1.4,
+  );
   
   // Specialized styles
   static const TextStyle statValue = TextStyle(

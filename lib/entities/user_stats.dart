@@ -15,6 +15,10 @@ class UserStats {
   int longestStreak;
   String arcFocus;
   List<String> achievements;
+  String? avatarUrl;
+  int followers;
+  int following;
+  bool isPrivate;
 
   UserStats({
     required this.userId,
@@ -33,6 +37,10 @@ class UserStats {
     this.longestStreak = 0,
     this.arcFocus = 'Balanced',
     this.achievements = const [],
+    this.avatarUrl,
+    this.followers = 0,
+    this.following = 0,
+    this.isPrivate = false,
   });
 
   void addXP(int amount) {
@@ -100,6 +108,10 @@ class UserStats {
     int? longestStreak,
     String? arcFocus,
     List<String>? achievements,
+    String? avatarUrl,
+    int? followers,
+    int? following,
+    bool? isPrivate,
   }) {
     return UserStats(
       userId: userId ?? this.userId,
@@ -118,6 +130,10 @@ class UserStats {
       longestStreak: longestStreak ?? this.longestStreak,
       arcFocus: arcFocus ?? this.arcFocus,
       achievements: achievements ?? this.achievements,
+      avatarUrl: avatarUrl ?? this.avatarUrl,
+      followers: followers ?? this.followers,
+      following: following ?? this.following,
+      isPrivate: isPrivate ?? this.isPrivate,
     );
   }
 }

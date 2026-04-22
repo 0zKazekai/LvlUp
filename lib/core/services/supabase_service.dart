@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../security/app_security.dart';
 
@@ -228,7 +229,7 @@ class SupabaseService {
 
       final response = await _client.storage
           .from('quest_proofs')
-          .upload(path, filePath);
+          .upload(path, File(filePath));
 
       if (response.isEmpty) {
         throw Exception('File upload failed');

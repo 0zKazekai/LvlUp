@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../core/theme/app_colors.dart';
-import '../core/theme/app_text_styles.dart';
-import '../providers/feed_provider.dart';
-import '../widgets/feed/proof_post_card.dart';
+import '../../core/theme/app_colors.dart';
+import '../../core/theme/app_text_styles.dart';
+import '../../providers/feed_provider.dart';
+import '../../widgets/feed/proof_post_card.dart';
 
 class ProofFeedPage extends StatelessWidget {
   const ProofFeedPage({Key? key}) : super(key: key);

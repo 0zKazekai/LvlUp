@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import '../core/theme/app_colors.dart';
-import '../core/theme/app_text_styles.dart';
-import '../common/rank_badge.dart';
+import '../../core/theme/app_colors.dart';
+import '../../core/theme/app_text_styles.dart';
+import '../../widgets/common/rank_badge.dart';
 
 class NetworkPage extends StatelessWidget {
   const NetworkPage({Key? key}) : super(key: key);

@@ -24,7 +24,6 @@ void main() async {
         url: supabaseUrl,
         anonKey: supabaseAnonKey,
         debug: true,
-        localStorage: const SupabaseAsyncStorage(),
       );
       print(' Supabase initialized successfully');
       

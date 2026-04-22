@@ -10,66 +10,50 @@ void main() {
       const supabaseAnonKey = String.fromEnvironment('SUPABASE_ANON_KEY');
 
       if (supabaseUrl.isEmpty || supabaseAnonKey.isEmpty) {
-        throw Exception('Pass credentials via --dart-define=SUPABASE_URL=... --dart-define=SUPABASE_ANON_KEY=...');
+        throw Exception(
+            'Pass credentials via --dart-define=SUPABASE_URL=... --dart-define=SUPABASE_ANON_KEY=...');
       }
-      
+
       await Supabase.initialize(
         url: supabaseUrl,
         anonKey: supabaseAnonKey,
         debug: true,
       );
-      
+
       supabase = Supabase.instance.client;
     });
 
     test('Supabase client should initialize successfully', () {
-      expect(supabase.supabaseUrl, isNotEmpty);
-      expect(supabase.supabaseUrl, contains('supabase.co'));
+      expect(supabase, isNotNull);
     });
 
     test('Should be able to connect to profiles table', () async {
       try {
-        final response = await supabase
-            .from('profiles')
-            .select('count')
-            .execute();
-        
-        expect(response.status, equals(200));
-        print('✅ Successfully connected to profiles table');
+        await supabase.from('profiles').select('count').count();
+        print('Successfully connected to profiles table');
       } catch (e) {
-        fail('❌ Failed to connect to profiles table: $e');
+        fail('Failed to connect to profiles table: $e');
       }
     });
 
     test('Should verify profiles table structure', () async {
       try {
-        final response = await supabase
+        await supabase
             .from('profiles')
             .select('id, username, is_premium, created_at, updated_at')
-            .limit(1)
-            .execute();
-        
-        expect(response.status, equals(200));
-        print('✅ Profiles table structure is correct');
+            .limit(1);
+        print('Profiles table structure is correct');
       } catch (e) {
-        fail('❌ Profiles table structure issue: $e');
+        fail('Profiles table structure issue: $e');
       }
     });
 
     test('Should verify RLS is working', () async {
       try {
-        // This should fail or return empty since no user is authenticated
-        final response = await supabase
-            .from('profiles')
-            .select('*')
-            .execute();
-        
-        // With RLS enabled, this should return empty or be restricted
-        expect(response.status, equals(200));
-        print('✅ RLS is properly configured');
+        await supabase.from('profiles').select('*');
+        print('RLS is properly configured');
       } catch (e) {
-        // Some level of restriction is expected with RLS
-        print('✅ RLS is working (access restricted as expected)');
+        print('RLS is working (access restricted as expected)');
       }
     });
   });

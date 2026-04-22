@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 class Habit {
   final String id;
   final String userId;

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../core/theme/app_colors.dart';
-import '../core/theme/app_text_styles.dart';
-import '../providers/quest_provider.dart';
-import '../widgets/arc/arc_challenge_tracker.dart';
-import '../widgets/quest/quest_card.dart';
-import '../widgets/chat/system_os_chat.dart';
+import '../../core/theme/app_colors.dart';
+import '../../core/theme/app_text_styles.dart';
+import '../../providers/quest_provider.dart';
+import '../../widgets/arc/arc_challenge_tracker.dart';
+import '../../widgets/quest/quest_card.dart';
+import '../../widgets/chat/system_os_chat.dart';
 
 class MyArcPage extends StatefulWidget {
   const MyArcPage({Key? key}) : super(key: key);
@@ -315,7 +315,7 @@ class _MyArcPageState extends State<MyArcPage> {
                   Expanded(
                     child: Container(
                       margin: const EdgeInsets.all(16),
-                      child: const SystemOSChat(),
+                      child: const SystemOSChat(expanded: true),
                     ),
                   ),
                 ],

@@ -15,7 +15,12 @@ class ChatMessage {
 }
 
 class SystemOSChat extends StatefulWidget {
-  const SystemOSChat({Key? key}) : super(key: key);
+  final bool expanded;
+
+  const SystemOSChat({
+    Key? key,
+    this.expanded = false,
+  }) : super(key: key);
 
   @override
   State<SystemOSChat> createState() => _SystemOSChatState();
@@ -109,28 +114,28 @@ class _SystemOSChatState extends State<SystemOSChat> {
       } else if (lowerMessage.contains('int') || lowerMessage.contains('intelligence')) {
         return 'INT: 16/20. Mind arc quests increase intelligence. Current bonus: +8 skill XP.';
       } else if (lowerMessage.contains('cha') || lowerMessage.contains('charisma')) {
-        return 'CHA: 11/20. Social quests boost charisma. Current bonus: +5 guild reputation.';
+        return 'CHA: 11/20. Social quests boost charisma. Current bonus: +5 network reputation.';
       } else {
         return 'Your stats: STR 14, VIT 12, INT 16, CHA 11. Total stat points: 53/80.';
       }
     }
     
-    // Guild-related responses
-    if (lowerMessage.contains('guild')) {
+    // Network-related responses
+    if (lowerMessage.contains('network')) {
       if (lowerMessage.contains('join')) {
-        return 'Guilds unlock at level 15. You\'re close! Current progress: 12/15.';
+        return 'Networks unlock at level 15. You\'re close! Current progress: 12/15.';
       } else if (lowerMessage.contains('benefit')) {
-        return 'Guilds provide daily bonuses, group quests, and exclusive rewards. Join at level 15.';
+        return 'Networks provide daily bonuses, group quests, and exclusive rewards. Join at level 15.';
       } else {
-        return 'Guild system available at level 15. Keep progressing to unlock this feature!';
+        return 'Network system available at level 15. Keep progressing to unlock this feature!';
       }
     }
     
     // Default responses
     final defaultResponses = [
-      'I can help with quests, levels, XP, stats, and guild information. What do you need?',
+      'I can help with quests, levels, XP, stats, and network information. What do you need?',
       'Try asking about "daily quests", "next level", "XP rewards", or "stat training".',
-      'System OS ready. Available commands: quest status, level progress, stat info, guild details.',
+      'System OS ready. Available commands: quest status, level progress, stat info, network details.',
       'Need assistance? I can provide information about your progression and available activities.',
     ];
     
@@ -227,6 +232,9 @@ class _SystemOSChatState extends State<SystemOSChat> {
           Expanded(
             child: Container(
               padding: const EdgeInsets.all(16),
+              constraints: widget.expanded 
+                  ? BoxConstraints(minHeight: MediaQuery.of(context).size.height * 0.6)
+                  : null,
               child: ListView.builder(
                 controller: _scrollController,
                 itemCount: _messages.length + (_isTyping ? 1 : 0),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../entities/user_stats.dart';
+import 'quest_provider.dart';
 
 class UserProvider extends ChangeNotifier {
   UserStats _userStats;
@@ -8,19 +9,22 @@ class UserProvider extends ChangeNotifier {
     userId: 'current_user',
     username: 'Player',
     title: 'Awakened',
-    level: 1,
-    currentXP: 0,
-    xpToNextLevel: 100,
-    str: 5,
-    vit: 5,
-    intel: 5,
-    cha: 5,
+    level: 12,
+    currentXP: 325,
+    xpToNextLevel: 400,
+    str: 14,
+    vit: 12,
+    intel: 16,
+    cha: 11,
     maxStat: 20,
-    questsCompleted: 0,
-    currentStreak: 0,
-    longestStreak: 0,
+    questsCompleted: 23,
+    currentStreak: 5,
+    longestStreak: 12,
     arcFocus: 'Balanced',
     achievements: [],
+    followers: 127,
+    following: 89,
+    isPrivate: false,
   );
 
   UserStats get userStats => _userStats;
@@ -42,6 +46,26 @@ class UserProvider extends ChangeNotifier {
 
   void updateTitle(String newTitle) {
     _userStats = _userStats.copyWith(title: newTitle);
+    notifyListeners();
+  }
+
+  void updateAvatar(String? avatarUrl) {
+    _userStats = _userStats.copyWith(avatarUrl: avatarUrl);
+    notifyListeners();
+  }
+
+  void updatePrivacy(bool isPrivate) {
+    _userStats = _userStats.copyWith(isPrivate: isPrivate);
+    notifyListeners();
+  }
+
+  void updateFollowers(int count) {
+    _userStats = _userStats.copyWith(followers: count);
+    notifyListeners();
+  }
+
+  void updateFollowing(int count) {
+    _userStats = _userStats.copyWith(following: count);
     notifyListeners();
   }
 
@@ -145,27 +169,3 @@ class UserProvider extends ChangeNotifier {
   bool get canLevelUp => _userStats.currentXP >= _userStats.xpToNextLevel;
 }
 
-// Quest class for the provider
-class Quest {
-  final String id;
-  final String title;
-  final String description;
-  final String arc;
-  final String rank;
-  final int xpReward;
-  final Map<String, int> statRewards;
-  final bool isCompleted;
-  final DateTime? completedAt;
-
-  Quest({
-    required this.id,
-    required this.title,
-    required this.description,
-    required this.arc,
-    required this.rank,
-    required this.xpReward,
-    this.statRewards = const {},
-    this.isCompleted = false,
-    this.completedAt,
-  });
-}

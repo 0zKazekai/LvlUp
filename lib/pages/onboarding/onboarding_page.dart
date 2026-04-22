@@ -73,7 +73,7 @@ class _OnboardingPageState extends State<OnboardingPage>
       end: 3,
     ).animate(CurvedAnimation(
       parent: _dotsController,
-      curve: Curves.stepCurve,
+      curve: Curves.linear,
     ));
   }
 
