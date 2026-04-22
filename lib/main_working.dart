@@ -43,4 +43,3 @@ class LvlUpApp extends StatelessWidget {
     );
   }
 }
-
