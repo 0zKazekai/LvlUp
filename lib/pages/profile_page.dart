@@ -10,7 +10,7 @@ import '../widgets/common/achievement_badge.dart';
 import '../widgets/proof/proof_timeline.dart';
 
 class ProfilePage extends StatefulWidget {
-  const ProfilePage({Key? key}) : super(key: key);
+  const ProfilePage({super.key});
 
   @override
   State<ProfilePage> createState() => _ProfilePageState();
@@ -146,22 +146,24 @@ class _ProfilePageState extends State<ProfilePage> {
     Navigator.pop(context);
     try {
       final XFile? image = await _imagePicker.pickImage(source: source);
-      if (image != null) {
+      if (image != null && mounted) {
         // TODO: Upload image to storage and update user profile
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
+          const SnackBar(
             content: Text('Avatar updated successfully!'),
             backgroundColor: AppColors.success,
           ),
         );
       }
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Failed to update avatar: $e'),
-          backgroundColor: AppColors.error,
-        ),
-      );
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Failed to update avatar: $e'),
+            backgroundColor: AppColors.error,
+          ),
+        );
+      }
     }
   }
 
@@ -178,10 +180,10 @@ class _ProfilePageState extends State<ProfilePage> {
             width: 60,
             height: 60,
             decoration: BoxDecoration(
-              color: AppColors.cyan.withOpacity(0.1),
+              color: AppColors.cyan.withValues(alpha:0.1),
               borderRadius: BorderRadius.circular(16),
               border: Border.all(
-                color: AppColors.cyan.withOpacity(0.3),
+                color: AppColors.cyan.withValues(alpha:0.3),
                 width: 1,
               ),
             ),
@@ -216,7 +218,7 @@ class _ProfilePageState extends State<ProfilePage> {
           color: AppColors.cardBg,
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
-            color: AppColors.textSecondary.withOpacity(0.2),
+            color: AppColors.textSecondary.withValues(alpha:0.2),
             width: 1,
           ),
         ),
@@ -246,10 +248,10 @@ class _ProfilePageState extends State<ProfilePage> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
-        color: _isPrivate ? AppColors.error.withOpacity(0.2) : AppColors.success.withOpacity(0.2),
+        color: _isPrivate ? AppColors.error.withValues(alpha:0.2) : AppColors.success.withValues(alpha:0.2),
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: _isPrivate ? AppColors.error.withOpacity(0.5) : AppColors.success.withOpacity(0.5),
+          color: _isPrivate ? AppColors.error.withValues(alpha:0.5) : AppColors.success.withValues(alpha:0.5),
           width: 1,
         ),
       ),
@@ -323,15 +325,15 @@ class _ProfilePageState extends State<ProfilePage> {
                               width: 100,
                               height: 100,
                               decoration: BoxDecoration(
-                                color: AppColors.cyan.withOpacity(0.2),
+                                color: AppColors.cyan.withValues(alpha:0.2),
                                 shape: BoxShape.circle,
                                 border: Border.all(
-                                  color: AppColors.cyan.withOpacity(0.5),
+                                  color: AppColors.cyan.withValues(alpha:0.5),
                                   width: 3,
                                 ),
                                 boxShadow: [
                                   BoxShadow(
-                                    color: AppColors.cyan.withOpacity(0.3),
+                                    color: AppColors.cyan.withValues(alpha:0.3),
                                     blurRadius: 15,
                                     spreadRadius: 2,
                                   ),
@@ -435,10 +437,10 @@ class _ProfilePageState extends State<ProfilePage> {
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                         decoration: BoxDecoration(
-                          color: AppColors.rankD.withOpacity(0.2),
+                          color: AppColors.rankD.withValues(alpha: 0.2),
                           borderRadius: BorderRadius.circular(16),
                           border: Border.all(
-                            color: AppColors.rankD.withOpacity(0.5),
+                            color: AppColors.rankD.withValues(alpha: 0.5),
                             width: 1,
                           ),
                         ),
@@ -459,6 +461,29 @@ class _ProfilePageState extends State<ProfilePage> {
                           ],
                         ),
                       ),
+                      const SizedBox(height: 16),
+
+                      // Followers / Following counts
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          _buildCountCard(
+                            label: 'Followers',
+                            count: userStats.followers,
+                            onTap: () {},
+                          ),
+                          const SizedBox(width: 16),
+                          _buildCountCard(
+                            label: 'Following',
+                            count: userStats.following,
+                            onTap: () {},
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 12),
+
+                      // Privacy toggle
+                      _buildPrivacyToggle(),
                     ],
                   ),
                 ),
@@ -503,7 +528,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     color: AppColors.cardBg,
                     borderRadius: BorderRadius.circular(12),
                     border: Border.all(
-                      color: AppColors.textSecondary.withOpacity(0.2),
+                      color: AppColors.textSecondary.withValues(alpha:0.2),
                       width: 1,
                     ),
                   ),
@@ -567,7 +592,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     color: AppColors.cardBg,
                     borderRadius: BorderRadius.circular(12),
                     border: Border.all(
-                      color: AppColors.textSecondary.withOpacity(0.2),
+                      color: AppColors.textSecondary.withValues(alpha:0.2),
                       width: 1,
                     ),
                   ),
@@ -615,7 +640,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     color: AppColors.cardBg,
                     borderRadius: BorderRadius.circular(12),
                     border: Border.all(
-                      color: AppColors.textSecondary.withOpacity(0.2),
+                      color: AppColors.textSecondary.withValues(alpha:0.2),
                       width: 1,
                     ),
                   ),
@@ -648,7 +673,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     color: AppColors.cardBg,
                     borderRadius: BorderRadius.circular(12),
                     border: Border.all(
-                      color: AppColors.textSecondary.withOpacity(0.2),
+                      color: AppColors.textSecondary.withValues(alpha:0.2),
                       width: 1,
                     ),
                   ),
@@ -756,7 +781,7 @@ class _ProfilePageState extends State<ProfilePage> {
       ),
       trailing: Icon(
         Icons.arrow_forward_ios,
-        color: AppColors.textSecondary.withOpacity(0.5),
+        color: AppColors.textSecondary.withValues(alpha:0.5),
         size: 16,
       ),
       onTap: onTap,

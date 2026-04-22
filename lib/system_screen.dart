@@ -221,7 +221,7 @@ class _PlaceholderPage extends StatelessWidget {
           const SizedBox(height: 8),
           Text(
             'Coming soon',
-            style: GoogleFonts.inter(fontSize: 14, color: AppColors.textSecondary.withOpacity(0.5)),
+            style: GoogleFonts.inter(fontSize: 14, color: AppColors.textSecondary.withValues(alpha:0.5)),
           ),
         ],
       ),
@@ -441,7 +441,7 @@ class _SystemScreenState extends State<SystemScreen> with TickerProviderStateMix
                           ),
                           boxShadow: [
                             BoxShadow(
-                              color: AppColors.purple.withOpacity(0.5),
+                              color: AppColors.purple.withValues(alpha: 0.5),
                               blurRadius: 8,
                               spreadRadius: 0,
                             ),
@@ -469,7 +469,7 @@ class _SystemScreenState extends State<SystemScreen> with TickerProviderStateMix
           color: AppColors.cardBg,
           borderRadius: BorderRadius.circular(14),
           border: Border.all(
-            color: AppColors.cyan.withOpacity(0.25),
+            color: AppColors.cyan.withAlpha(64),
             width: 1,
           ),
           gradient: LinearGradient(
@@ -477,7 +477,7 @@ class _SystemScreenState extends State<SystemScreen> with TickerProviderStateMix
             end: Alignment.bottomRight,
             colors: [
               AppColors.cardBg,
-              AppColors.purple.withOpacity(0.08),
+              AppColors.purple.withValues(alpha:0.08),
             ],
           ),
         ),
@@ -488,9 +488,9 @@ class _SystemScreenState extends State<SystemScreen> with TickerProviderStateMix
               width: 36,
               height: 36,
               decoration: BoxDecoration(
-                color: AppColors.cyan.withOpacity(0.1),
+                color: AppColors.cyan.withValues(alpha:0.1),
                 borderRadius: BorderRadius.circular(8),
-                border: Border.all(color: AppColors.cyan.withOpacity(0.3)),
+                border: Border.all(color: AppColors.cyan.withValues(alpha:0.3)),
               ),
               child: const Center(
                 child: Text('!', style: TextStyle(color: AppColors.cyan, fontSize: 18, fontWeight: FontWeight.w800)),
@@ -584,7 +584,7 @@ class _SystemScreenState extends State<SystemScreen> with TickerProviderStateMix
                     ),
                     boxShadow: [
                       BoxShadow(
-                        color: quest.rankColor.withOpacity(0.5),
+                        color: quest.rankColor.withValues(alpha:0.5),
                         blurRadius: 8,
                         spreadRadius: 0,
                       ),
@@ -770,9 +770,9 @@ class _RankBadge extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.15),
+        color: color.withValues(alpha:0.15),
         borderRadius: BorderRadius.circular(6),
-        border: Border.all(color: color.withOpacity(0.4), width: 1),
+        border: Border.all(color: color.withValues(alpha:0.4), width: 1),
       ),
       child: Text(
         'RANK $rank',
@@ -850,9 +850,9 @@ class _ProofButton extends StatelessWidget {
       return Container(
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
         decoration: BoxDecoration(
-          color: AppColors.green.withOpacity(0.15),
+          color: AppColors.green.withAlpha(38),
           borderRadius: BorderRadius.circular(10),
-          border: Border.all(color: AppColors.green.withOpacity(0.4)),
+          border: Border.all(color: AppColors.purple.withAlpha(102)),
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
@@ -877,9 +877,9 @@ class _ProofButton extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
         decoration: BoxDecoration(
-          color: AppColors.cyan.withOpacity(0.12),
+          color: AppColors.cyan.withValues(alpha:0.12),
           borderRadius: BorderRadius.circular(10),
-          border: Border.all(color: AppColors.cyan.withOpacity(0.4)),
+          border: Border.all(color: AppColors.cyan.withValues(alpha:0.4)),
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
@@ -969,7 +969,7 @@ class _StatRing extends StatelessWidget {
               painter: _RingPainter(
                 progress: (value / max) * controller.value,
                 color: color,
-                trackColor: color.withOpacity(0.12),
+                trackColor: color.withValues(alpha:0.12),
               ),
               child: SizedBox(
                 width: 68,
@@ -1038,7 +1038,7 @@ class _RingPainter extends CustomPainter {
         ..strokeWidth = strokeWidth
         ..strokeCap = StrokeCap.round
         ..color = color
-        ..maskFilter = MaskFilter.blur(BlurStyle.normal, color.opacity * 2);
+        ..maskFilter = MaskFilter.blur(BlurStyle.normal, (color.a * 2).clamp(0.0, 1.0));
 
       canvas.drawArc(
         rect,
@@ -1058,7 +1058,7 @@ class _RingPainter extends CustomPainter {
           ..style = PaintingStyle.stroke
           ..strokeWidth = strokeWidth
           ..strokeCap = StrokeCap.round
-          ..color = color.withOpacity(0.4)
+          ..color = color.withValues(alpha:0.4)
           ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 6),
       );
     }

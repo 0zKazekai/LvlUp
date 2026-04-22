@@ -1,11 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../widgets/auth/auth_wrapper.dart';
-import '../../widgets/shell/main_shell.dart';
-import '../../pages/login_page.dart';
-import '../../pages/dashboard_page.dart';
-import '../../pages/onboarding/onboarding_page.dart';
-import '../../providers/user_provider.dart';
 import '../../test/data_plumbing_test.dart';
 
 class AppRouter {

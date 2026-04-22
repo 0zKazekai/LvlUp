@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 import '../core/services/database_service.dart';
-import '../models/habit.dart';
-import '../models/user.dart' as user_model;
 
 class DataPlumbingTest extends StatefulWidget {
-  const DataPlumbingTest({Key? key}) : super(key: key);
+  const DataPlumbingTest({super.key});
 
   @override
   State<DataPlumbingTest> createState() => _DataPlumbingTestState();
@@ -157,7 +154,7 @@ class _DataPlumbingTestState extends State<DataPlumbingTest> {
                 decoration: BoxDecoration(
                   color: const Color(0xFF1E293B),
                   borderRadius: BorderRadius.circular(8),
-                  border: Border.all(color: const Color(0xFF00E5FF).withOpacity(0.3)),
+                  border: Border.all(color: const Color(0xFF00E5FF).withValues(alpha: 0.3)),
                 ),
                 child: _isLoading
                     ? const Center(

@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'core/theme/app_theme.dart';
 import 'core/router/app_router.dart';
-import 'widgets/auth/auth_wrapper.dart';
 import 'providers/user_provider.dart';
 import 'providers/quest_provider.dart';
 import 'providers/feed_provider.dart';

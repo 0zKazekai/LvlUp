@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../entities/user_stats.dart';
 
 class Quest {
   final String id;
