@@ -2,22 +2,28 @@
 
 ## Quick Setup Instructions
 
-### 1. Install Supabase CLI
+### 1. Use Supabase CLI via npx (Recommended)
 ```bash
-# Install via npm (recommended)
-npm install -g supabase
+# If PowerShell blocks npm/npx, fix execution policy first:
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
 
-# Or download from https://supabase.com/docs/reference/cli
+# Then use npx (no installation needed)
+npx supabase --help
+
+# Or install as dev dependency
+npm install supabase --save-dev
+
+# Alternative: Download standalone binary from https://supabase.com/docs/reference/cli
 ```
 
 ### 2. Link Your Project
 ```bash
-supabase link --project-ref xarvugngdpriyaokqouu
+npx supabase link --project-ref xarvugngdpriyaokqouu
 ```
 
 ### 3. Run Migration
 ```bash
-supabase db push
+npx supabase db push
 ```
 
 ## What the Migration Creates
