@@ -1,4 +1,4 @@
-name: Build Web Demo (Debug)
+name: Build Web Demo (Fixed)
 
 on:
   push:
@@ -16,9 +16,16 @@ jobs:
     - name: Setup Flutter
       uses: subosito/flutter-action@v2
       with:
-        flutter-version: '3.3.0'
+        flutter-version: '3.19.0'
         channel: 'stable'
         cache: true
+        cache-key: 'flutter-${{ runner.os }}-3.19.0'
+        cache-path: '/opt/hostedtoolcache/flutter'
+        
+    - name: Verify Dart SDK
+      run: |
+        dart --version
+        flutter --version
         
     - name: Check Flutter version
       run: flutter --version
