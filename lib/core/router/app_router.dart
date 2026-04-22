@@ -3,10 +3,12 @@ import 'package:go_router/go_router.dart';
 import '../../pages/onboarding/onboarding_page.dart';
 import '../../widgets/shell/main_shell.dart';
 import '../../providers/user_provider.dart';
+import '../../test/data_plumbing_test.dart';
 
 class AppRouter {
   static const String onboarding = '/onboarding';
   static const String home = '/home';
+  static const String dataTest = '/data-test';
 
   static GoRouter router() {
     return GoRouter(
@@ -33,6 +35,10 @@ class AppRouter {
         GoRoute(
           path: AppRouter.home,
           builder: (context, state) => const MainShell(),
+        ),
+        GoRoute(
+          path: AppRouter.dataTest,
+          builder: (context, state) => const DataPlumbingTest(),
         ),
       ],
       errorBuilder: (context, state) => Scaffold(

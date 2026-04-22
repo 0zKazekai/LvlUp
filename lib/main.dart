@@ -5,9 +5,11 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'core/theme/app_theme.dart';
 import 'core/router/app_router.dart';
+import 'core/services/database_service.dart';
 import 'providers/user_provider.dart';
 import 'providers/quest_provider.dart';
 import 'providers/feed_provider.dart';
+import 'test/data_plumbing_test.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -31,6 +33,16 @@ void main() async {
         debug: true,
       );
       print(' Supabase initialized successfully');
+      
+      // Initialize DatabaseService
+      await DatabaseService.instance.initialize();
+      print(' DatabaseService initialized successfully');
+      
+      // Run data plumbing test in development
+      if (const String.fromEnvironment('FLUTTER_ENV') == 'development') {
+        print(' Running data plumbing test...');
+        await DatabaseService.instance.testDataPlumbing();
+      }
     } else {
       print(' Supabase credentials missing');
     }
