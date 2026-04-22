@@ -3,11 +3,11 @@ import 'package:crypto/crypto.dart';
 import 'dart:convert';
 
 class AppSecurity {
-  static const FlutterSecureStorage _secureStorage = FlutterSecureStorage(
-    aOptions: AndroidOptions(
+  static final FlutterSecureStorage _secureStorage = FlutterSecureStorage(
+    aOptions: const AndroidOptions(
       encryptedSharedPreferences: true,
     ),
-    iOptions: IOSOptions(
+    iOptions: const IOSOptions(
       accessibility: KeychainAccessibility.first_unlock_this_device,
     ),
   );

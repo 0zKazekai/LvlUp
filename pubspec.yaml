@@ -19,6 +19,13 @@ dependencies:
   
   # UI and styling
   google_fonts: ^6.2.1
+  
+  # Security and storage
+  flutter_secure_storage: ^9.0.0
+  crypto: ^3.0.3
+  
+  # Image picker for quest proofs
+  image_picker: ^1.0.7
 
 dev_dependencies:
   flutter_test:
