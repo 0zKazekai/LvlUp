@@ -1,0 +1,251 @@
+name: Build and Deploy Web Demo
+
+on:
+  push:
+    branches: [ main, master ]
+    paths:
+      - 'lib/**'
+      - 'pubspec.yaml'
+      - 'web/**'
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  build-web:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: '3.19.0'
+        channel: 'stable'
+        cache: true
+        
+    - name: Install dependencies
+      run: flutter pub get
+      
+    - name: Create environment file
+      run: |
+        cat > lib/.env << EOF
+        # Supabase Configuration
+        SUPABASE_URL=${{ secrets.SUPABASE_URL }}
+        SUPABASE_ANON_KEY=${{ secrets.SUPABASE_ANON_KEY }}
+        SUPABASE_SERVICE_KEY=${{ secrets.SUPABASE_SERVICE_KEY }}
+        
+        # App Configuration
+        APP_ENV=production
+        APP_NAME=LvlUp
+        APP_VERSION=1.0.0
+        
+        # Analytics (Optional)
+        FIREBASE_ANALYTICS_API_KEY=${{ secrets.FIREBASE_ANALYTICS_API_KEY }}
+        SENTRY_DSN=${{ secrets.SENTRY_DSN }}
+        
+        # Feature Flags
+        ENABLE_PUSH_NOTIFICATIONS=true
+        ENABLE_ANALYTICS=true
+        ENABLE_CRASH_REPORTING=true
+        EOF
+        
+    - name: Verify environment file
+      run: |
+        echo "Environment file created:"
+        cat lib/.env
+        echo "---"
+        echo "Supabase URL: ${{ secrets.SUPABASE_URL }}"
+        echo "Supabase Key: ${{ secrets.SUPABASE_ANON_KEY != '' && 'Set' || 'Missing' }}"
+        
+    - name: Run tests
+      run: flutter test
+      
+    - name: Build web app
+      run: |
+        flutter build web --release \
+          --web-renderer canvaskit \
+          --no-tree-shake-icons \
+          --dart-define=FLUTTER_WEB_USE_SKIA=true \
+          --dart-define=FLUTTER_WEB_CANVASKIT_RENDERER=true
+          
+    - name: Optimize web build
+      run: |
+        # Compress assets
+        find build/web -name "*.png" -exec pngquant --quality=85 --output {} --force {} \; || true
+        find build/web -name "*.jpg" -exec jpegoptim --max=85 {} \; || true
+        
+        # Generate service worker for offline support
+        cat > build/web/sw.js << 'EOF'
+        const CACHE_NAME = 'lvlup-v1';
+        const urlsToCache = [
+          '/',
+          '/index.html',
+          '/main.dart.js',
+          '/flutter.js',
+          '/assets/',
+          '/icons/'
+        ];
+
+        self.addEventListener('install', event => {
+          event.waitUntil(
+            caches.open(CACHE_NAME)
+              .then(cache => cache.addAll(urlsToCache))
+          );
+        });
+
+        self.addEventListener('fetch', event => {
+          event.respondWith(
+            caches.match(event.request)
+              .then(response => {
+                return response || fetch(event.request);
+              })
+          );
+        });
+        EOF
+        
+        # Update index.html to register service worker
+        sed -i 's|</body>|<script>\nif ("serviceWorker" in navigator) {\n  navigator.serviceWorker.register("/sw.js");\n}\n</script></body>|' build/web/index.html
+        
+    - name: Upload to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v3
+      if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./build/web
+        keep_files: true
+        
+    - name: Deploy to Netlify (Alternative)
+      uses: nwtgck/actions-netlify@v2
+      if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+      with:
+        publish-dir: './build/web'
+        production-branch: main
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        deploy-message: "Deploy from GitHub Actions"
+        enable-pull-request-comment: false
+        overwrites-pull-request-comment: false
+        enable-commit-comment: false
+      env:
+        NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+        NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+        
+    - name: Get deployment URL
+      if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+      id: deployment
+      run: |
+        echo "web_url=https://0zKazekai.github.io/LvlUp/" >> $GITHUB_OUTPUT
+        
+    - name: Comment on PR with deployment link
+      if: github.event_name == 'pull_request'
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const deploymentUrl = 'https://0zKazekai.github.io/LvlUp/';
+          github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: `## Web Demo Deployed! 
+            Your LvlUp web demo is now live: ${deploymentUrl}
+            
+            This deployment includes:
+            - Supabase integration with production secrets
+            - Optimized web build with CanvasKit renderer
+            - Service worker for offline support
+            - Compressed assets for faster loading
+            
+            **Note**: Make sure your Supabase project is configured for web access in Settings > API.`
+          });
+
+  build-android:
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup Java
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'temurin'
+        java-version: '17'
+        
+    - name: Setup Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: '3.19.0'
+        channel: 'stable'
+        cache: true
+        
+    - name: Create environment file
+      run: |
+        cat > lib/.env << EOF
+        SUPABASE_URL=${{ secrets.SUPABASE_URL }}
+        SUPABASE_ANON_KEY=${{ secrets.SUPABASE_ANON_KEY }}
+        SUPABASE_SERVICE_KEY=${{ secrets.SUPABASE_SERVICE_KEY }}
+        APP_ENV=production
+        EOF
+        
+    - name: Install dependencies
+      run: flutter pub get
+      
+    - name: Build APK
+      run: flutter build apk --release
+      
+    - name: Upload APK artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: lvlup-android-apk
+        path: build/app/outputs/flutter-apk/app-release.apk
+        retention-days: 30
+        
+    - name: Build App Bundle
+      run: flutter build appbundle --release
+      
+    - name: Upload App Bundle artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: lvlup-android-bundle
+        path: build/app/outputs/bundle/release/app-release.aab
+        retention-days: 30
+
+  build-ios:
+    runs-on: macos-latest
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: '3.19.0'
+        channel: 'stable'
+        cache: true
+        
+    - name: Create environment file
+      run: |
+        cat > lib/.env << EOF
+        SUPABASE_URL=${{ secrets.SUPABASE_URL }}
+        SUPABASE_ANON_KEY=${{ secrets.SUPABASE_ANON_KEY }}
+        SUPABASE_SERVICE_KEY=${{ secrets.SUPABASE_SERVICE_KEY }}
+        APP_ENV=production
+        EOF
+        
+    - name: Install dependencies
+      run: flutter pub get
+      
+    - name: Build iOS (simulator)
+      run: flutter build ios --release --simulator
+      
+    - name: Upload iOS build
+      uses: actions/upload-artifact@v4
+      with:
+        name: lvlup-ios-build
+        path: build/ios/Build/Products/Release-iphonesimulator/LvlUp.app
+        retention-days: 30
