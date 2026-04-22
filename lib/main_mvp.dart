@@ -90,4 +90,3 @@ class LvlUpHomePage extends StatelessWidget {
     );
   }
 }
-
