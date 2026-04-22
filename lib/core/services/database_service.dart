@@ -1,7 +1,7 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import '../security/app_security.dart';
-import '../../models/user.dart';
+import '../../models/user.dart' as user_model;
 import '../../models/habit.dart';
 
 class DatabaseService {
@@ -56,14 +56,14 @@ class DatabaseService {
       }
 
       print(' Successfully fetched user profile');
-      return User.fromJson(response);
+      return user_model.User.fromJson(response);
     } catch (e) {
       print(' Failed to fetch current user: $e');
       return null;
     }
   }
 
-  Future<User> createUserProfile(Map<String, dynamic> userData) async {
+  Future<user_model.User> createUserProfile(Map<String, dynamic> userData) async {
     try {
       final userId = _client.auth.currentUser?.id;
       if (userId == null) {
@@ -92,14 +92,14 @@ class DatabaseService {
           .single();
 
       print(' Successfully created user profile');
-      return User.fromJson(response);
+      return user_model.User.fromJson(response);
     } catch (e) {
       print(' Failed to create user profile: $e');
       rethrow;
     }
   }
 
-  Future<User> updateUserProfile(Map<String, dynamic> updates) async {
+  Future<user_model.User> updateUserProfile(Map<String, dynamic> updates) async {
     try {
       final userId = _client.auth.currentUser?.id;
       if (userId == null) {
@@ -127,7 +127,7 @@ class DatabaseService {
           .single();
 
       print(' Successfully updated user profile');
-      return User.fromJson(response);
+      return user_model.User.fromJson(response);
     } catch (e) {
       print(' Failed to update user profile: $e');
       rethrow;

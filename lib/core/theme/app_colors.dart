@@ -36,6 +36,10 @@ class AppColors {
   static const Color divider = Color(0xFF475569);
   static const Color shadow = Color(0xFF000000);
   
+  // Additional colors
+  static const Color statInt = statIntel;
+  static const Color xpBackground = Color(0xFF1E293B);
+  
   // Gradient
   static const LinearGradient brandGradient = LinearGradient(
     colors: [cyan, purple],
@@ -54,4 +58,28 @@ class AppColors {
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
   );
+  
+  static const LinearGradient xpGradient = LinearGradient(
+    colors: [cyan, green],
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+  );
+  
+  // Helper method for rank colors
+  static Color rankColor(String rank) {
+    switch (rank.toLowerCase()) {
+      case 'd':
+        return rankD;
+      case 'c':
+        return rankC;
+      case 'b':
+        return rankB;
+      case 'a':
+        return rankA;
+      case 's':
+        return rankS;
+      default:
+        return textSecondary;
+    }
+  }
 }
