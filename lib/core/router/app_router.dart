@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import '../../pages/onboarding/onboarding_page.dart';
+import '../../widgets/auth/auth_wrapper.dart';
 import '../../widgets/shell/main_shell.dart';
 import '../../providers/user_provider.dart';
 import '../../test/data_plumbing_test.dart';
@@ -16,25 +16,7 @@ class AppRouter {
       routes: [
         GoRoute(
           path: '/',
-          redirect: (context, state) {
-            final userProvider = context.read<UserProvider>();
-            
-            // Check if user has completed onboarding
-            if (userProvider.userStats.username == 'Player' && 
-                userProvider.userStats.questsCompleted == 0) {
-              return AppRouter.onboarding;
-            }
-            
-            return AppRouter.home;
-          },
-        ),
-        GoRoute(
-          path: AppRouter.onboarding,
-          builder: (context, state) => const OnboardingPage(),
-        ),
-        GoRoute(
-          path: AppRouter.home,
-          builder: (context, state) => const MainShell(),
+          builder: (context, state) => const AuthWrapper(),
         ),
         GoRoute(
           path: AppRouter.dataTest,

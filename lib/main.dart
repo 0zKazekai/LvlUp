@@ -31,8 +31,17 @@ void main() async {
         url: supabaseUrl,
         anonKey: supabaseAnonKey,
         debug: true,
+        localStorage: const SupabaseAsyncStorage(),
       );
       print(' Supabase initialized successfully');
+      
+      // Check for existing session
+      final session = Supabase.instance.client.auth.currentSession;
+      print(' Existing session found: ${session != null}');
+      if (session != null) {
+        print(' User: ${session.user.email}');
+        print(' Session expires at: ${session.expiresAt}');
+      }
       
       // Initialize DatabaseService
       await DatabaseService.instance.initialize();
