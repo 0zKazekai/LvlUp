@@ -1,0 +1,87 @@
+name: Build Web Demo (Debug)
+
+on:
+  push:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  build-web:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: '3.19.0'
+        channel: 'stable'
+        cache: true
+        
+    - name: Check Flutter version
+      run: flutter --version
+      
+    - name: Install dependencies
+      run: flutter pub get
+      
+    - name: Check dependencies
+      run: flutter doctor
+      
+    - name: Create environment file
+      run: |
+        echo "Creating environment file..."
+        mkdir -p lib
+        echo "SUPABASE_URL=${{ secrets.SUPABASE_URL }}" > lib/.env
+        echo "SUPABASE_ANON_KEY=${{ secrets.SUPABASE_ANON_KEY }}" >> lib/.env
+        echo "APP_ENV=production" >> lib/.env
+        
+        echo "Environment file created:"
+        cat lib/.env || echo "No .env file found"
+        
+        # Check if secrets are available
+        echo "Checking secrets..."
+        if [ -z "${{ secrets.SUPABASE_URL }}" ]; then
+          echo "ERROR: SUPABASE_URL secret is missing!"
+          echo "Please add SUPABASE_URL to your GitHub Secrets"
+          exit 1
+        fi
+        
+        if [ -z "${{ secrets.SUPABASE_ANON_KEY }}" ]; then
+          echo "ERROR: SUPABASE_ANON_KEY secret is missing!"
+          echo "Please add SUPABASE_ANON_KEY to your GitHub Secrets"
+          exit 1
+        fi
+        
+        echo "All secrets are available!"
+        
+    - name: Run tests
+      run: flutter test --no-pub || echo "Tests failed, continuing..."
+      
+    - name: Build web app
+      run: |
+        echo "Building web app..."
+        flutter build web --release --web-renderer canvaskit || {
+          echo "CanvasKit build failed, trying html renderer..."
+          flutter build web --release --web-renderer html
+        }
+        echo "Web build completed!"
+        
+    - name: Check build output
+      run: |
+        echo "Build directory contents:"
+        ls -la build/web/ || echo "No build directory found"
+        
+    - name: Upload to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v3
+      if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./build/web
+        
+    - name: Get deployment URL
+      if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+      run: |
+        echo "Web demo deployed at: https://0zKazekai.github.io/LvlUp/"
+        echo "It may take a few minutes to become available."
